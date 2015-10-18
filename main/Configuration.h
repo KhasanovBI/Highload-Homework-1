@@ -16,8 +16,8 @@ class Configuration {
     unsigned port;
     unsigned CPUCoresCount;
     unsigned connectionsMaxCount;
-    const char* rootDirectory;
-
+    const char *rootDirectory;
+    static unsigned bufferSize;
 public:
     Configuration(std::string filepath);
 
@@ -25,9 +25,11 @@ public:
 
     const unsigned getCPUCoresCount();
 
-    unsigned int getConnectionsMaxCount();
+    const unsigned int getConnectionsMaxCount();
 
-    const char * getRootDirectory() const;
+    const char *getRootDirectory() const;
+
+    static const unsigned getBufferSize();
 };
 
 

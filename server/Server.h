@@ -26,9 +26,9 @@ class Server {
 
     void createWorkers();
 
-    static void signal_cb(ev::sig &signal, int revents);
+    static void signalCallback(ev::sig &signal, int revents);
 
-    void io_accept_cb(ev::io &watcher, int revents);
+    void IOAcceptCallback(ev::io &watcher, int revents);
 
 public:
     Server(Configuration *configuration);

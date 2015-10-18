@@ -10,7 +10,7 @@ Server::Server(Configuration *configuration) : configuration(configuration) {
     connectionsMaxCount = configuration->getConnectionsMaxCount();
 };
 
-void Server::signal_cb(ev::sig &signal, int revents) {
+void Server::signalCallback(ev::sig &signal, int revents) {
     signal.loop.break_loop();
 }
 
@@ -23,7 +23,7 @@ void Server::createWorkers() {
     }
 }
 
-void Server::io_accept_cb(ev::io &watcher, int revents) {
+void Server::IOAcceptCallback(ev::io &watcher, int revents) {
     if (EV_ERROR & revents) {
         perror("Got invalid event");
         return;
@@ -39,7 +39,7 @@ void Server::io_accept_cb(ev::io &watcher, int revents) {
     }
 
     std::cout << "Client connected: socket descriptor = " << clientSocketDescriptor << ", worker PID = " <<  getpid() << std::endl;
-    new ClientInstance(configuration, clientSocketDescriptor);
+    new ClientInstance(clientSocketDescriptor);
 }
 
 void Server::start() {
@@ -68,13 +68,13 @@ void Server::start() {
     // createWorkers();
     ev::default_loop loop;
 
-    ioWatcher.set<Server, &Server::io_accept_cb>(this);
+    ioWatcher.set<Server, &Server::IOAcceptCallback>(this);
     ioWatcher.start(_socket, ev::READ);
 
-    sigintWatcher.set<&Server::signal_cb>();
+    sigintWatcher.set<&Server::signalCallback>();
     sigintWatcher.start(SIGINT);
 
-    sigtermWatcher.set<&Server::signal_cb>();
+    sigtermWatcher.set<&Server::signalCallback>();
     sigtermWatcher.start(SIGTERM);
 
     loop.run(0);

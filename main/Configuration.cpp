@@ -3,7 +3,7 @@
 //
 
 #include "Configuration.h"
-
+unsigned Configuration::bufferSize = 0;
 Configuration::Configuration(std::string filepath) : filepath(filepath) {
     try {
         config.readFile("settings.cfg");
@@ -20,6 +20,7 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
         CPUCoresCount = config.lookup("CPU_cores_count");
         connectionsMaxCount = config.lookup("connections_max_count");
         rootDirectory = config.lookup("root_directory");
+        bufferSize = config.lookup("buffer_size");
     } catch (const libconfig::SettingNotFoundException &nfex) {
         std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
         exit(EXIT_FAILURE);
@@ -34,10 +35,14 @@ const unsigned int Configuration::getCPUCoresCount() {
     return CPUCoresCount;
 }
 
-unsigned Configuration::getConnectionsMaxCount() {
+const unsigned Configuration::getConnectionsMaxCount() {
     return connectionsMaxCount;
 }
 
 const char* Configuration::getRootDirectory() const {
     return rootDirectory;
+}
+
+const unsigned Configuration::getBufferSize() {
+    return bufferSize;
 }

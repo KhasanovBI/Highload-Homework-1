@@ -16,20 +16,20 @@
 #include "../main/Configuration.h"
 
 class ClientInstance {
-    int clientSocketDescriptor;
-    Configuration *configuration;
+    const int clientSocketDescriptor;
     static int totalClientsCount;
     ev::io ioWatcher;
-    void router_cb(ev::io &watcher, int revents);
-    void read_cb(ev::io &watcher);
+    void routerCallback(ev::io &watcher, int revents);
+    void readCallback(ev::io &watcher);
     // Buffers that are pending write
     std::list<Buffer*> writeQueue;
 public:
     static int getTotalClientsCount();
 
-    void write_cb(ev::io &watcher);
+    void writeCallback(ev::io &watcher);
 
-    ClientInstance(const Configuration *configuration, const int i);
+    ClientInstance(const int i);
+    ~ClientInstance();
 };
 
 

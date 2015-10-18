@@ -5,9 +5,13 @@
 #ifndef HIGHLOAD_HTTP_SERVER_BUFFER_H
 #define HIGHLOAD_HTTP_SERVER_BUFFER_H
 
+#include <stddef.h>
+#include <string.h>
+#include "../main/Configuration.h"
 
 class Buffer {
 public:
+    static const unsigned bufferSize;
     char *data;
     size_t length;
     size_t position;
@@ -18,7 +22,9 @@ public:
 
     size_t nbytes();
 
-    char* dataPosition();
+    char *dataPosition();
+
+    static const unsigned int getBufferSize();
 };
 
 
