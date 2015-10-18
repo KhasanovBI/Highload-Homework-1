@@ -14,10 +14,15 @@ class Configuration {
     libconfig::Config config;
     unsigned port;
     unsigned threadsCount;
+    unsigned connectionsMaxCount;
 public:
     Configuration(std::string filepath);
+
     unsigned getPort();
+
     unsigned getThreadsCount();
+
+    unsigned int getConnectionsMaxCount();
 };
 
 

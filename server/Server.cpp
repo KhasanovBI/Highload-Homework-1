@@ -4,38 +4,37 @@
 
 #include "Server.h"
 
+
+
 Server::Server(Configuration *configuration) : configuration(configuration) {
-    port = configuration->getPort();
+    port = (uint16_t) configuration->getPort();
     threadsCount = configuration->getThreadsCount();
+    connectionsMaxCount = configuration->getConnectionsMaxCount();
 };
 
-void Server::stdin_cb(EV_P_ ev_io *w, int revents) {
-    std::cout << "stdin ready";
-    // for one-shot events, one must manually stop the watcher
-    // with its corresponding stop function.
-    ev_io_stop(EV_A_ w);
-
-    // this causes all nested ev_run's to stop iterating
-    ev_break(EV_A_ EVBREAK_ALL);
-}
-
-void Server::timeout_cb(EV_P_ ev_timer *w, int revents) {
-    puts("timeout");
-    // this causes the innermost ev_run to stop iterating
-    ev_break(EV_A_ EVBREAK_ONE);
-}
 
 void Server::start() {
-    // use the default event loop unless you have special needs
-    struct ev_loop *loop = EV_DEFAULT;
-    // initialise an io watcher, then start it
-    // this one will watch for stdin to become readable
-    ev_io_init (&stdin_watcher, stdin_cb, /*STDIN_FILENO*/ 0, EV_READ);
-    ev_io_start(loop, &stdin_watcher);
-    // initialise a timer watcher, then start it
-    // simple non-repeating 5.5 second timeout
-    ev_timer_init (&timeout_watcher, timeout_cb, 5.5, 0.);
-    ev_timer_start(loop, &timeout_watcher);
-    // now wait for events to arrive
-    ev_run(loop, 0);
+    ev::default_loop loop;
+    _socket = socket(PF_INET, SOCK_STREAM, 0); /* SOCK_STREAM - Connectionless, unreliable datagrams of fixed maximum length.  */
+    sockaddr_in socketAddress;
+    socketAddress.sin_family = AF_INET; /* IP protocol family.  */
+    socketAddress.sin_port = htons(port);
+    socketAddress.sin_addr.s_addr = INADDR_ANY;
+    /* Give the socket FD the local address ADDR (which is LEN bytes long).  */
+    if (bind(_socket, (const sockaddr *) &socketAddress, sizeof(socketAddress)) != 0) {
+        perror("Bind error.\n");
+    }
+    if (listen(_socket, connectionsMaxCount) == -1) {
+        perror("Listen error\n");
+    }
+    bool flag = true;
+    setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, (const void *) &flag, sizeof flag);
+    /* F_GETFL, F_SETFL - Получить, установить флаги статуса файла, ассоциированного с дескриптором fildes соответственно.  */
+    fcntl(_socket, F_SETFL, fcntl(_socket, F_GETFL, 0) | O_NONBLOCK);
+
+
+
+
+
+    loop.run(0);
 }

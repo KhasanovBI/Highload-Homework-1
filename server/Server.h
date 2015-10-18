@@ -6,19 +6,20 @@
 #define HIGHLOAD_HTTP_SERVER_SERVER_H
 
 #include <ev++.h>
+#include <netinet/in.h>
+#include <fcntl.h>
+#include <sys/socket.h>
+
 #include "../main/Configuration.h"
 
 class Server {
     Configuration *configuration;
-    int port;
+    uint16_t port;
     int threadsCount;
-    ev_io stdin_watcher;
-    ev_timer timeout_watcher;
-
-    static void stdin_cb(EV_P_ ev_io *w, int revents);
-
-    static void timeout_cb(EV_P_ ev_timer *w, int revents);
-
+    unsigned connectionsMaxCount;
+    int _socket;
+    ev::io stdin_watcher;
+    ev::timer timeout_watcher;
 public:
     Server(Configuration *configuration);
 

@@ -18,6 +18,7 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
     try {
         port = config.lookup("port");
         threadsCount = config.lookup("threads");
+        connectionsMaxCount = config.lookup("connections_max_count");
     } catch (const libconfig::SettingNotFoundException &nfex) {
         std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
         exit(EXIT_FAILURE);
@@ -30,4 +31,8 @@ unsigned Configuration::getPort() {
 
 unsigned Configuration::getThreadsCount() {
     return threadsCount;
+}
+
+unsigned Configuration::getConnectionsMaxCount() {
+    return connectionsMaxCount;
 }
