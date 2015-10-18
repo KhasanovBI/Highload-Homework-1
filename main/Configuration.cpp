@@ -19,7 +19,7 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
         port = config.lookup("port");
         threadsCount = config.lookup("threads");
     } catch (const libconfig::SettingNotFoundException &nfex) {
-        std::cerr << "No 'name' setting in configuration file." << std::endl;
+        std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
         exit(EXIT_FAILURE);
     }
 }

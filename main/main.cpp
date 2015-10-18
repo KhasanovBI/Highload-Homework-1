@@ -2,13 +2,13 @@
 // Created by bulat on 03.10.15.
 //
 
-#include <ev++.h>
 #include "Configuration.h"
+#include "../server/Server.h"
 
 int main() {
-    Configuration configuration("settings.cfg");
-
-    unsigned port = configuration.getPort();
-    unsigned threadsCount = configuration.getThreadsCount();
-
+    Configuration *configuration = new Configuration("settings.cfg");
+    Server server(configuration);
+    server.start();
+    delete configuration;
+    return 0;
 }
