@@ -5,24 +5,29 @@
 #ifndef HIGHLOAD_HTTP_SERVER_CONFIGURATION_H
 #define HIGHLOAD_HTTP_SERVER_CONFIGURATION_H
 
-#include "string"
+
 #include <iostream>
 #include <libconfig.h++>
+#include <string>
 
 class Configuration {
     std::string filepath;
     libconfig::Config config;
     unsigned port;
-    unsigned threadsCount;
+    unsigned CPUCoresCount;
     unsigned connectionsMaxCount;
+    const char* rootDirectory;
+
 public:
     Configuration(std::string filepath);
 
-    unsigned getPort();
+    const unsigned getPort();
 
-    unsigned getThreadsCount();
+    const unsigned getCPUCoresCount();
 
     unsigned int getConnectionsMaxCount();
+
+    const char * getRootDirectory() const;
 };
 
 

@@ -6,22 +6,34 @@
 #define HIGHLOAD_HTTP_SERVER_SERVER_H
 
 #include <ev++.h>
-#include <netinet/in.h>
 #include <fcntl.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
+#include "ClientInstance.h"
 #include "../main/Configuration.h"
 
 class Server {
     Configuration *configuration;
     uint16_t port;
-    int threadsCount;
     unsigned connectionsMaxCount;
     int _socket;
-    ev::io stdin_watcher;
-    ev::timer timeout_watcher;
+    int workersCount;
+    ev::io ioWatcher;
+    ev::sig sigintWatcher;
+    ev::sig sigtermWatcher;
+
+    void createWorkers();
+
+    static void signal_cb(ev::sig &signal, int revents);
+
+    void io_accept_cb(ev::io &watcher, int revents);
+
 public:
     Server(Configuration *configuration);
+
+    ~Server();
 
     void start();
 };

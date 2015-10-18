@@ -7,7 +7,18 @@
 
 
 class Buffer {
+public:
+    char *data;
+    size_t length;
+    size_t position;
 
+    Buffer(const char *bytes, size_t nbytes);
+
+    ~Buffer();
+
+    size_t nbytes();
+
+    char* dataPosition();
 };
 
 

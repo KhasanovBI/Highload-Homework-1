@@ -17,22 +17,27 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
     }
     try {
         port = config.lookup("port");
-        threadsCount = config.lookup("threads");
+        CPUCoresCount = config.lookup("CPU_cores_count");
         connectionsMaxCount = config.lookup("connections_max_count");
+        rootDirectory = config.lookup("root_directory");
     } catch (const libconfig::SettingNotFoundException &nfex) {
         std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
         exit(EXIT_FAILURE);
     }
 }
 
-unsigned Configuration::getPort() {
+const unsigned int Configuration::getPort() {
     return port;
 }
 
-unsigned Configuration::getThreadsCount() {
-    return threadsCount;
+const unsigned int Configuration::getCPUCoresCount() {
+    return CPUCoresCount;
 }
 
 unsigned Configuration::getConnectionsMaxCount() {
     return connectionsMaxCount;
+}
+
+const char* Configuration::getRootDirectory() const {
+    return rootDirectory;
 }
