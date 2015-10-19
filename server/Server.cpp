@@ -4,10 +4,10 @@
 
 #include "Server.h"
 
-Server::Server(Configuration *configuration) : configuration(configuration) {
-    port = (uint16_t) configuration->getPort();
-    workersCount = configuration->getCPUCoresCount() - 1;
-    connectionsMaxCount = configuration->getConnectionsMaxCount();
+Server::Server(Configuration *pConfiguration) : pConfiguration(pConfiguration) {
+    port = (uint16_t) pConfiguration->getPort();
+    workersCount = pConfiguration->getCPUCoresCount() - 1;
+    connectionsMaxCount = pConfiguration->getConnectionsMaxCount();
 };
 
 void Server::signalCallback(ev::sig &signal, int revents) {

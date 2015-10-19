@@ -6,9 +6,9 @@
 #include "../server/Server.h"
 
 int main() {
-    Configuration *configuration = new Configuration("settings.cfg");
-    Server server(configuration);
+    Configuration *pConfiguration = new Configuration("settings.cfg");
+    Server server(pConfiguration);
     server.start();
-    delete configuration;
+    delete pConfiguration;
     return 0;
 }

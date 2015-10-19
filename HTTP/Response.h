@@ -7,7 +7,8 @@
 
 #include <unistd.h>
 
-struct HTTPResponse {
+class Response {
+public:
     unsigned statusCode;
     int dataFD;
     off_t dataSize;

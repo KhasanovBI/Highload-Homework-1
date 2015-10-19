@@ -11,7 +11,7 @@
 
 class Buffer {
 public:
-    static const unsigned bufferSize;
+    static unsigned bufferSize;
     char *data;
     size_t length;
     size_t position;

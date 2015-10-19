@@ -3,7 +3,9 @@
 //
 
 #include "Configuration.h"
-unsigned Configuration::bufferSize = 0;
+#include "../server/Server.h"
+
+unsigned Configuration::bufferSize;
 Configuration::Configuration(std::string filepath) : filepath(filepath) {
     try {
         config.readFile("settings.cfg");
@@ -25,6 +27,7 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
         std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
         exit(EXIT_FAILURE);
     }
+    Buffer::bufferSize = bufferSize;
 }
 
 const unsigned int Configuration::getPort() {

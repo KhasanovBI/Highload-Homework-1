@@ -4,7 +4,7 @@
 
 #include "Buffer.h"
 
-const unsigned Buffer::bufferSize = Configuration::getBufferSize();
+unsigned Buffer::bufferSize;
 
 Buffer::Buffer(const char *bytes, size_t nbytes) {
     position = 0;

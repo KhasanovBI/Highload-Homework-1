@@ -15,7 +15,7 @@
 #include "../main/Configuration.h"
 
 class Server {
-    Configuration *configuration;
+    Configuration *pConfiguration;
     uint16_t port;
     unsigned connectionsMaxCount;
     int _socket;
@@ -31,7 +31,7 @@ class Server {
     void IOAcceptCallback(ev::io &watcher, int revents);
 
 public:
-    Server(Configuration *configuration);
+    Server(Configuration *pConfiguration);
 
     ~Server();
 
