@@ -3,7 +3,8 @@
 //
 
 #include "ClientInstance.h"
-#include "../HTTP/Handler.h"
+#include "../HTTP/handler.h"
+
 
 int ClientInstance::totalClientsCount = 0;
 int ClientInstance::getTotalClientsCount() {
@@ -44,6 +45,17 @@ void ClientInstance::readCallback(ev::io &watcher) {
     char buffer[Buffer::getBufferSize()];
     ssize_t nread = recv(watcher.fd, buffer, sizeof(buffer), 0);
     std::cout << "Работай сервачок" << std::endl;
+    switch (nread) {
+        case -1:
+            perror("Read error");
+        case 0:
+            std::cout << "Socket closed: FD = " << watcher.fd << ", worker's PID = " << getpid() << std::endl;
+            delete this;
+            return;
+        default:
+            writeQueue.push_back(new Buffer(buffer, nread));
+            break;
+    }
     Response response = makeResponse(buffer);
 }
 

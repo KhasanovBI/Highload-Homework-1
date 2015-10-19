@@ -13,6 +13,10 @@
 
 #include "ClientInstance.h"
 #include "../main/Configuration.h"
+#include "../HTTP/Methods.h"
+#include "../HTTP/MIMETypes.h"
+#include "../HTTP/StatusCodes.h"
+#include "../HTTP/Versions.h"
 
 class Server {
     Configuration *pConfiguration;
@@ -30,12 +34,18 @@ class Server {
 
     void IOAcceptCallback(ev::io &watcher, int revents);
 
+    void instanciateHTTP();
+
+    void deleteInstancesHTTP();
+
 public:
     Server(Configuration *pConfiguration);
 
     ~Server();
 
     void start();
+
+
 };
 
 #endif //HIGHLOAD_HTTP_SERVER_SERVER_H

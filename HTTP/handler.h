@@ -9,10 +9,12 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include "Request.h"
 #include "Response.h"
 
-Request * makeRequest(char *pCharRequest);
-Response makeResponse(char* pCharRequest);
+Request *makeRequest(char *pCharRequest);
+
+Response makeResponse(char *pCharRequest);
 
 #endif //HIGHLOAD_HTTP_SERVER_HANDLER_H

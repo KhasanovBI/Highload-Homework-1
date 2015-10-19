@@ -3,21 +3,21 @@
 //
 
 
-#include "Handler.h"
-#include "MIMETypes.h"
+#include "handler.h"
 
-
+Methods::Method_t Methods::map;
 Request *makeRequest(char *pCharRequest) {
     Request *pRequest = new Request();
     char *requestLine = strtok(pCharRequest, "\r\n");
     char *method = strtok(requestLine, " ");
-    std::cout << method;
-
+    pRequest->method = Methods::getMethodFromString(method);
+    std::cout << Methods::map[pRequest->method]<< std::endl;
+    //pRequest->path = ;
     return pRequest;
 }
 
 
-
-Response makeResponse(char* pCharRequest) {
+Response makeResponse(char *pCharRequest) {
     makeRequest(pCharRequest);
+
 }

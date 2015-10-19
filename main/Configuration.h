@@ -18,6 +18,7 @@ class Configuration {
     unsigned connectionsMaxCount;
     const char *rootDirectory;
     static unsigned bufferSize;
+    static const char* serverName;
 public:
     Configuration(std::string filepath);
 
@@ -30,6 +31,8 @@ public:
     const char *getRootDirectory() const;
 
     static const unsigned getBufferSize();
+
+    static const char* getServerName();
 };
 
 

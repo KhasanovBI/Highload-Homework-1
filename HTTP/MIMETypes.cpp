@@ -3,26 +3,11 @@
 //
 
 #include "MIMETypes.h"
+#include "utils.h"
 
-template<typename T>
-struct mapInitHelper {
-    T &mapping;
-
-    mapInitHelper(T &d) : mapping(d) { }
-
-    mapInitHelper &operator()(typename T::key_type const &key, typename T::mapped_type const &value) {
-        mapping[key] = value;
-        return *this;
-    }
-};
-
-template<typename T>
-mapInitHelper<T> mapInit(T &item) {
-    return mapInitHelper<T>(item);
-}
-
+MIMETypes *MIMETypes::self;
+MIMETypes::MIMEType_t MIMETypes::map;
 MIMETypes::MIMETypes() {
-    MIMEType_t map;
     mapInit(map)
             (html, "text/html")
             (css, "text/css")
@@ -31,5 +16,22 @@ MIMETypes::MIMETypes() {
             (gif, "image/gif")
             (jpeg, "image/jpeg")
             (jpg, "image/jpeg")
-            (png, "image/png");
+            (png, "image/png")
+            (other, "Not Allowed");
+}
+
+MIMETypes *MIMETypes::Instance() {
+    if (!self) {
+        self = new MIMETypes();
+    }
+    return self;
+}
+
+bool MIMETypes::DeleteInstance() {
+    if (self) {
+        delete self;
+        self = NULL;
+        return true;
+    }
+    return false;
 }

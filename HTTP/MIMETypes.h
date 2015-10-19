@@ -5,37 +5,25 @@
 #ifndef HIGHLOAD_HTTP_SERVER_MIMETYPES_H
 #define HIGHLOAD_HTTP_SERVER_MIMETYPES_H
 
-
 #include <string>
 #include <map>
 
 class MIMETypes {
-    static MIMETypes *self;
-    MIMETypes();
+public:
     enum fileType {
-        html, css, js, jpg, jpeg, png, gif, swf
+        html, css, js, jpg, jpeg, png, gif, swf, other
     };
     typedef std::map<fileType, std::string> MIMEType_t;
-    MIMEType_t map;
-public:
-    static MIMETypes* Instance()
-    {
-        if(!self)
-        {
-            self = new MIMETypes();
-        }
-        return self;
-    }
+    static MIMEType_t map;
+private:
+    static MIMETypes *self;
 
-    static bool DeleteInstance()
-    {
-        if(self)
-        {
-            delete self;
-            self = NULL;
-            return true;
-        }
-        return false;
-    }
+    MIMETypes();
+
+public:
+    static bool DeleteInstance();
+
+    static MIMETypes *Instance();
 };
+
 #endif //HIGHLOAD_HTTP_SERVER_MIMETYPES_H

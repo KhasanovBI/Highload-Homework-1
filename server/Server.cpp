@@ -38,16 +38,33 @@ void Server::IOAcceptCallback(ev::io &watcher, int revents) {
         return;
     }
 
-    std::cout << "Client connected: socket descriptor = " << clientSocketDescriptor << ", worker PID = " <<  getpid() << std::endl;
+    std::cout << "Client connected: socket descriptor = " << clientSocketDescriptor << ", worker PID = " << getpid() <<
+    std::endl;
     new ClientInstance(clientSocketDescriptor);
 }
 
+void Server::instanciateHTTP() {
+    Methods::Instance();
+    MIMETypes::Instance();
+    StatusCodes::Instance();
+    Versions::Instance();
+}
+
+void Server::deleteInstancesHTTP() {
+    Methods::DeleteInstance();
+    MIMETypes::DeleteInstance();
+    StatusCodes::DeleteInstance();
+    Versions::DeleteInstance();
+}
+
 void Server::start() {
+    instanciateHTTP();
     sockaddr_in socketAddress;
     socketAddress.sin_family = AF_INET; /* IP protocol family.  */
     socketAddress.sin_port = htons(port);
     socketAddress.sin_addr.s_addr = INADDR_ANY;
-    _socket = socket(PF_INET, SOCK_STREAM, 0); /* SOCK_STREAM - Connectionless, unreliable datagrams of fixed maximum length.  */
+    _socket = socket(PF_INET, SOCK_STREAM,
+                     0); /* SOCK_STREAM - Connectionless, unreliable datagrams of fixed maximum length.  */
     if (_socket == -1) {
         perror("Can't create socket");
     }
@@ -84,4 +101,5 @@ Server::~Server() {
     /* SHUT_RDWR - No more receptions or transmissions.  */
     shutdown(_socket, SHUT_RDWR);
     close(_socket);
+    deleteInstancesHTTP();
 }
