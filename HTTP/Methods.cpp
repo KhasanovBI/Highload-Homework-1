@@ -6,7 +6,7 @@
 #include "utils.h"
 
 Methods *Methods::self;
-
+Methods::Method_t Methods::map;
 Methods::Methods() {
     mapInit(map)
             (GET, "GET")

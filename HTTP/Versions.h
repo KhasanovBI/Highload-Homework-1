@@ -11,7 +11,7 @@
 class Versions {
 public:
     enum Version {
-        HTTP1_0, HTTP1_1
+        HTTP1_0, HTTP1_1, UNSUPPORTED
     };
     typedef std::map<Version, std::string> Version_t;
     static Version_t map;
@@ -24,6 +24,8 @@ public:
     static Versions *Instance();
 
     static bool DeleteInstance();
+
+    static Version getVersionFromString(char *pCharVersion);
 };
 
 

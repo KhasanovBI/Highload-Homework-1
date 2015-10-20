@@ -5,15 +5,13 @@
 #ifndef HIGHLOAD_HTTP_SERVER_MIMETYPES_H
 #define HIGHLOAD_HTTP_SERVER_MIMETYPES_H
 
-#include <string>
 #include <map>
+#include <string>
+#include "../FS/fileTypes.h"
 
 class MIMETypes {
 public:
-    enum fileType {
-        html, css, js, jpg, jpeg, png, gif, swf, other
-    };
-    typedef std::map<fileType, std::string> MIMEType_t;
+    typedef std::map<FileType, std::string> MIMEType_t;
     static MIMEType_t map;
 private:
     static MIMETypes *self;

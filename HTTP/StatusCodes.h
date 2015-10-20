@@ -11,10 +11,10 @@
 
 class StatusCodes {
 public:
-    enum statusCode {
+    enum StatusCode {
         _200, _400, _403, _404, _405
     };
-    typedef std::map<statusCode, std::string> StatusCode_t;
+    typedef std::map<StatusCode, std::string> StatusCode_t;
     static StatusCode_t map;
 private:
     static StatusCodes *self;

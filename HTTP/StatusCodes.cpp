@@ -10,11 +10,11 @@ StatusCodes::StatusCode_t StatusCodes::map;
 
 StatusCodes::StatusCodes() {
     mapInit(map)
-            (_200, "OK")
-            (_400, "Bad Request")
-            (_403, "Forbidden")
-            (_404, "Not Found")
-            (_405, "Method Not Allowed");
+            (_200, "200 OK")
+            (_400, "400 Bad Request")
+            (_403, "403 Forbidden")
+            (_404, "404 Not Found")
+            (_405, "405 Method Not Allowed");
 }
 
 StatusCodes *StatusCodes::Instance() {

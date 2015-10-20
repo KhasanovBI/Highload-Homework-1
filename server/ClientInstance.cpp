@@ -3,7 +3,7 @@
 //
 
 #include "ClientInstance.h"
-#include "../HTTP/handler.h"
+#include "../HTTP/handlers.h"
 
 
 int ClientInstance::totalClientsCount = 0;
@@ -56,7 +56,7 @@ void ClientInstance::readCallback(ev::io &watcher) {
             writeQueue.push_back(new Buffer(buffer, nread));
             break;
     }
-    Response response = makeResponse(buffer);
+    Response *pResponse = makeResponse(buffer);
 }
 
 void ClientInstance::routerCallback(ev::io &watcher, int revents) {

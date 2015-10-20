@@ -1,0 +1,26 @@
+//
+// Created by bulat on 20.10.15.
+
+//
+
+#include <iostream>
+#include "Request.h"
+
+Request::Request(Methods::Method method, URLPath *pURLPath, Versions::Version version) : method(method),
+                                                                                         pURLPath(pURLPath),
+                                                                                         version(version) { }
+
+Request::Request(char *pCharRequest) {
+    char *pRequestLine = strtok(pCharRequest, "\r\n");
+    char *pCharMethod = strtok(pRequestLine, " ");
+    method = Methods::getMethodFromString(pCharMethod);
+    char *pCharURLPath = strtok(NULL, " ");
+    pURLPath = new URLPath(pCharURLPath);
+    char* pCharVersion = strtok(NULL, " ");
+    version = Versions::getVersionFromString(pCharVersion);
+    std::cout << Methods::map[method] << std::endl << Versions::map[version] << std::endl << pURLPath->getURLPath();
+};
+
+Request::~Request() {
+    delete pURLPath;
+}

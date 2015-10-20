@@ -5,9 +5,8 @@
 #ifndef HIGHLOAD_HTTP_SERVER_METHODS_H
 #define HIGHLOAD_HTTP_SERVER_METHODS_H
 
-#include <string>
 #include <map>
-#include <string.h>
+#include <string>
 
 class Methods {
 public:

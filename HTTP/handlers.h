@@ -15,6 +15,6 @@
 
 Request *makeRequest(char *pCharRequest);
 
-Response makeResponse(char *pCharRequest);
+Response *makeResponse(char *pCharRequest);
 
 #endif //HIGHLOAD_HTTP_SERVER_HANDLER_H

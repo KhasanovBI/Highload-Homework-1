@@ -3,16 +3,13 @@
 //
 
 #include "headers.h"
-#include "Request.h"
-#include "../main/Configuration.h"
-#include "Response.h"
 
-std::string getVersion(Request request) {
-    return Versions::map[request.version];
+std::string getVersion(Request *pRequest) {
+    return Versions::map[pRequest->version];
 }
 
-std::string getContentTypeHeader(MIMETypes::fileType type) {
-    return "Content-Type: " + MIMETypes::map[type] + "\r\n";
+std::string getStatusLine(Request *pRequest, Response *pResponse) {
+    return getVersion(pRequest) + " " + StatusCodes::map[pResponse->statusCode] + "\r\n";
 }
 
 std::string getConnectionHeader(Request request) {
@@ -22,10 +19,19 @@ std::string getConnectionHeader(Request request) {
     return "";
 }
 
-std::string getStatusLine(Request request, Response response) { //TODO
-    return getVersion(request) + " ";
+std::string getContentTypeHeader(FileType fileType) {
+    return "Content-Type: " + MIMETypes::map[fileType] + "\r\n";
+}
+
+std::string getDateHeader() {
+    std::string dateHeader("Date: ");
+    time_t now = time(0);
+    struct tm timeStruct = *gmtime(&now);
+    char buf[100];
+    strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S %Z\r\n", &timeStruct);
+    return dateHeader + buf;
 }
 
 std::string getServerHeader(Request request) {
-    return std::string("Server: ") + Configuration::getServerName();
+    return std::string("Server: ") + Configuration::getServerName() + "\r\n";
 }

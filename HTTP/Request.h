@@ -5,15 +5,22 @@
 #ifndef HIGHLOAD_HTTP_SERVER_HTTPREQUEST_H
 #define HIGHLOAD_HTTP_SERVER_HTTPREQUEST_H
 
-#include <linux/limits.h>
+#include <cstring>
 #include "Methods.h"
 #include "Versions.h"
+#include "URLPaths.h"
 
 class Request {
 public:
     Methods::Method method;
-    std::string path[PATH_MAX + 1];
+    URLPath *pURLPath;
     Versions::Version version;
+
+    Request(char *pCharRequest);
+
+    Request(Methods::Method method, URLPath *pURLPath, Versions::Version version);
+
+    ~Request();
 };
 
 #endif //HIGHLOAD_HTTP_SERVER_HTTPREQUEST_H
