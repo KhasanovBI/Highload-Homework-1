@@ -4,7 +4,7 @@
 
 #include "Response.h"
 
-Response::Response(Request *pRequest) {
+Response::Response(Request *pRequest): dataSize(0), dataFD(-1) {
     this->pRequest = pRequest;
     getVersion();
     statusCode = (pRequest->method != Methods::UNSUPPORTED ? StatusCodes::_200 : StatusCodes::_405);
@@ -21,7 +21,8 @@ Response::Response(Request *pRequest) {
             if (filePath.back() == '/') {
                 struct stat statStruct;
                 int FD = open(filePath.c_str(), O_RDONLY);
-                fstat(FD, &statStruct); /* Get file attributes for the file that file descriptor FD is open on and put them in statStruct.  */
+                /* Get file attributes for the file that file descriptor FD is open on and put them in statStruct.  */
+                fstat(FD, &statStruct);
                 close(FD);
                 if (S_ISDIR(statStruct.st_mode)) { /* st_mode - File mode.  */
                     addDefaultPageToFilePath(filePath);
@@ -32,11 +33,10 @@ Response::Response(Request *pRequest) {
                 int FD = open(filePath.c_str(), O_RDONLY);
                 fstat(FD, &statStruct);
                 if (S_ISREG(statStruct.st_mode)) {
+                    dataSize = statStruct.st_size;
                     switch (pRequest->method) {
                         case Methods::GET:
                             dataFD = FD;
-                            dataSize = statStruct.st_size;
-                            std::cout << "FD: " << dataFD << std::endl;
                             break;
                         case Methods::HEAD:
                             close(FD);
@@ -57,8 +57,11 @@ Response::Response(Request *pRequest) {
             statusCode = StatusCodes::_404;
         }
     }
-    headers = getStatusLine().append(getConnectionHeader()).append(getContentTypeHeader(filePath)).append(getDateHeader()).append(getServerHeader());
-    std::cout << headers;
+    headers = getStatusLine().append(getConnectionHeader());
+    if (statusCode == StatusCodes::_200) {
+        headers.append(getContentLengthHeader());
+    }
+    headers.append(getContentTypeHeader(filePath)).append(getDateHeader()).append(getServerHeader()).append("\r\n\r\n");
 }
 
 void Response::getVersion() {
@@ -70,8 +73,7 @@ void Response::getVersion() {
 }
 
 std::string Response::getStatusLine() {
-    std::string statusLine(Versions::map[version]);
-    return statusLine.append(" ").append(StatusCodes::map[statusCode]).append("\r\n");
+    return std::string(Versions::map[version]).append(" ").append(StatusCodes::map[statusCode]).append("\r\n");
 }
 
 const std::string Response::getConnectionHeader() {
@@ -82,13 +84,12 @@ const std::string Response::getConnectionHeader() {
 }
 
 const std::string Response::getContentTypeHeader(std::string filePath) {
-    std::string contentType("Content-Type: ");
-    return contentType.append(MIMETypes::map[FileTypes::getFileTypeFromPath(filePath)]).append("\r\n");
+    return std::string("Content-Type: ").append(MIMETypes::map[FileTypes::getFileTypeFromPath(filePath)]).append(
+            "\r\n");
 }
 
 const std::string Response::getContentLengthHeader() {
-    std::string contentLength("Content-Length: " );
-    return contentLength.append(' ').append("\r\n");
+    return std::string("Content-Length: ").append(std::to_string(dataSize)).append("\r\n");
 }
 
 const std::string Response::getDateHeader() {
@@ -101,5 +102,9 @@ const std::string Response::getDateHeader() {
 }
 
 const std::string Response::getServerHeader() {
-    return std::string("Server: ") + Configuration::getServerName() + "\r\n";
+    return std::string("Server: ").append(Configuration::getServerName()).append("\r\n");
+}
+
+Response::~Response() {
+    delete pRequest;
 }

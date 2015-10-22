@@ -19,13 +19,13 @@ class Response {
 public:
     Request *pRequest;
     StatusCodes::StatusCode statusCode;
-    size_t contentLength;
     int dataFD;
     off_t dataSize;
     std::string headers;
     Versions::Version version;
 
     Response(Request *pRequest);
+    ~Response();
 
 private:
     void getVersion();

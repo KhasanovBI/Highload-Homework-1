@@ -6,25 +6,29 @@
 
 unsigned Buffer::bufferSize;
 
-Buffer::Buffer(const char *bytes, size_t nbytes) {
-    position = 0;
-    length = nbytes;
-    data = new char[nbytes];
-    memcpy(data, bytes, nbytes);
+Buffer::Buffer(std::string headers, int dataFD, off_t dataSize) : headersPosition(0),
+                                                                  dataFD(dataFD), dataOffset(NULL), dataSize(dataSize) {
+    headersLength = headers.size();
+    pCharHeaders = new char[headersLength];
+    memcpy(pCharHeaders, headers.c_str(), headersLength);
 }
 
 Buffer::~Buffer() {
-    delete[] data;
-}
-
-char *Buffer::dataPosition() {
-    return data + position;
-}
-
-size_t Buffer::nbytes() {
-    return length - position;
+    delete[] pCharHeaders;
 }
 
 const unsigned int Buffer::getBufferSize() {
     return bufferSize;
+}
+
+char *Buffer::getPHeadersPosition() {
+    return pCharHeaders + headersPosition;
+}
+
+size_t Buffer::getHeadersRemainBytes() {
+    return headersLength - headersPosition;
+}
+
+size_t Buffer::getDataRemainBytes() {
+    return dataSize - dataPosition;
 }

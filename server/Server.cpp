@@ -80,9 +80,11 @@ void Server::start() {
     /* Give the socket FD the local address ADDR (which is LEN bytes long).  */
     if (bind(_socket, (const sockaddr *) &socketAddress, sizeof(socketAddress)) == -1) {
         perror("Bind error");
+        return;
     }
     if (listen(_socket, connectionsMaxCount) == -1) {
         perror("Listen error");
+        return;
     }
     // createWorkers();
     ev::default_loop loop;

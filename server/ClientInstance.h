@@ -7,12 +7,14 @@
 
 #include <fcntl.h>
 #include <sys/socket.h>
-#include <stdlib.h>
+#include <sys/sendfile.h>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <ev++.h>
 #include <list>
 #include "Buffer.h"
+#include "../HTTP/handlers.h"
 #include "../main/Configuration.h"
 
 class ClientInstance {
@@ -21,12 +23,14 @@ class ClientInstance {
     ev::io ioWatcher;
     void routerCallback(ev::io &watcher, int revents);
     void readCallback(ev::io &watcher);
+    void writeCallback(ev::io &watcher);
+
     // Buffers that are pending write
     std::list<Buffer*> writeQueue;
 public:
     static int getTotalClientsCount();
 
-    void writeCallback(ev::io &watcher);
+
 
     ClientInstance(const int i);
     ~ClientInstance();

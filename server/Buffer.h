@@ -11,20 +11,23 @@
 
 class Buffer {
 public:
-    static unsigned bufferSize;
-    char *data;
-    size_t length;
-    size_t position;
-
-    Buffer(const char *bytes, size_t nbytes);
-
+    Buffer(std::string headers, int dataFD, off_t dataSize);
     ~Buffer();
-
-    size_t nbytes();
-
-    char *dataPosition();
-
+    
+    static unsigned bufferSize;
     static const unsigned int getBufferSize();
+
+    char *pCharHeaders;
+    size_t headersLength;
+    size_t headersPosition;
+    char *getPHeadersPosition();
+    size_t getHeadersRemainBytes();
+
+    int dataFD;
+    off_t dataSize;
+    off_t *dataOffset;
+    size_t dataPosition;
+    size_t getDataRemainBytes();
 };
 
 

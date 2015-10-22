@@ -11,6 +11,7 @@ Request::Request(Methods::Method method, URLPath *pURLPath, Versions::Version ve
                                                                                          version(version) { }
 
 Request::Request(char *pCharRequest) {
+    std::cout << pCharRequest << std::endl;
     char *pRequestLine = strtok(pCharRequest, "\r\n");
     char *pCharMethod = strtok(pRequestLine, " ");
     method = Methods::getMethodFromString(pCharMethod);
