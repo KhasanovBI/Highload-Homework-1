@@ -61,7 +61,7 @@ Response::Response(Request *pRequest): dataSize(0), dataFD(-1) {
     if (statusCode == StatusCodes::_200) {
         headers.append(getContentLengthHeader());
     }
-    headers.append(getContentTypeHeader(filePath)).append(getDateHeader()).append(getServerHeader()).append("\r\n\r\n");
+    headers.append(getContentTypeHeader(filePath)).append(getDateHeader()).append(getServerHeader()).append("\r\n");
 }
 
 void Response::getVersion() {

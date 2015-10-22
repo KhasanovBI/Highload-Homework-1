@@ -86,7 +86,7 @@ void Server::start() {
         perror("Listen error");
         return;
     }
-    // createWorkers();
+    createWorkers();
     ev::default_loop loop;
 
     ioWatcher.set<Server, &Server::IOAcceptCallback>(this);

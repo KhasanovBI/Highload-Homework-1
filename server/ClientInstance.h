@@ -21,18 +21,20 @@ class ClientInstance {
     const int clientSocketDescriptor;
     static int totalClientsCount;
     ev::io ioWatcher;
+
     void routerCallback(ev::io &watcher, int revents);
+
     void readCallback(ev::io &watcher);
+
     void writeCallback(ev::io &watcher);
 
     // Buffers that are pending write
-    std::list<Buffer*> writeQueue;
+    std::list<Buffer *> writeQueue;
 public:
     static int getTotalClientsCount();
 
-
-
     ClientInstance(const int i);
+
     ~ClientInstance();
 };
 
