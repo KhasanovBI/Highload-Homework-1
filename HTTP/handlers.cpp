@@ -10,4 +10,5 @@ Request *makeRequest(char *pCharRequest) {
 
 Response *makeResponse(char *pCharRequest) {
     Request *pRequest = makeRequest(pCharRequest);
+    return new Response(pRequest);
 }

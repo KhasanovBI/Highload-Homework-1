@@ -3,21 +3,21 @@
 //
 
 #include "MIMETypes.h"
-#include "utils.h"
+#include "../main/utils.h"
 
 MIMETypes *MIMETypes::self;
 MIMETypes::MIMEType_t MIMETypes::map;
 MIMETypes::MIMETypes() {
     mapInit(map)
-            (html, "text/html")
-            (css, "text/css")
-            (js, "application/javascript")
-            (swf, "application/x-shockwave-flash")
-            (gif, "image/gif")
-            (jpeg, "image/jpeg")
-            (jpg, "image/jpeg")
-            (png, "image/png")
-            (other, "Not Allowed");
+            (FileTypes::html, "text/html")
+            (FileTypes::css, "text/css")
+            (FileTypes::js, "application/javascript")
+            (FileTypes::swf, "application/x-shockwave-flash")
+            (FileTypes::gif, "image/gif")
+            (FileTypes::jpeg, "image/jpeg")
+            (FileTypes::jpg, "image/jpeg")
+            (FileTypes::png, "image/png")
+            (FileTypes::other, "text/plain");
 }
 
 MIMETypes *MIMETypes::Instance() {

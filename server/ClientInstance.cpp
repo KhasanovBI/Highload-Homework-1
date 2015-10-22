@@ -44,7 +44,6 @@ void ClientInstance::writeCallback(ev::io &watcher) {
 void ClientInstance::readCallback(ev::io &watcher) {
     char buffer[Buffer::getBufferSize()];
     ssize_t nread = recv(watcher.fd, buffer, sizeof(buffer), 0);
-    std::cout << "Работай сервачок" << std::endl;
     switch (nread) {
         case -1:
             perror("Read error");

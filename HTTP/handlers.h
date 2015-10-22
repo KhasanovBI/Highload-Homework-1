@@ -5,8 +5,8 @@
 #ifndef HIGHLOAD_HTTP_SERVER_HANDLER_H
 #define HIGHLOAD_HTTP_SERVER_HANDLER_H
 
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <string>

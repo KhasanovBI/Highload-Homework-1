@@ -3,7 +3,7 @@
 //
 
 #include "Methods.h"
-#include "utils.h"
+#include "../main/utils.h"
 
 Methods *Methods::self;
 Methods::Method_t Methods::map;

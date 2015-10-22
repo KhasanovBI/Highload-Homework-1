@@ -34,9 +34,9 @@ class Server {
 
     void IOAcceptCallback(ev::io &watcher, int revents);
 
-    void instanciateHTTP();
+    void instanciateStatics();
 
-    void deleteInstancesHTTP();
+    void deleteStaticInstances();
 
 public:
     Server(Configuration *pConfiguration);

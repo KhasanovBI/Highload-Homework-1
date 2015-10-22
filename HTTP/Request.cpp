@@ -18,7 +18,6 @@ Request::Request(char *pCharRequest) {
     pURLPath = new URLPath(pCharURLPath);
     char* pCharVersion = strtok(NULL, " ");
     version = Versions::getVersionFromString(pCharVersion);
-    std::cout << Methods::map[method] << std::endl << Versions::map[version] << std::endl << pURLPath->getURLPath();
 };
 
 Request::~Request() {

@@ -6,7 +6,10 @@
 #include "../server/Server.h"
 
 unsigned Configuration::bufferSize;
-const char* Configuration::serverName;
+const char *Configuration::defaultPage;
+const char *Configuration::rootDirectory;
+const char *Configuration::serverName;
+
 Configuration::Configuration(std::string filepath) : filepath(filepath) {
     try {
         config.readFile("settings.cfg");
@@ -24,6 +27,7 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
         connectionsMaxCount = config.lookup("connections_max_count");
         rootDirectory = config.lookup("root_directory");
         bufferSize = config.lookup("buffer_size");
+        defaultPage = config.lookup("default_page");
         serverName = config.lookup("server_name");
     } catch (const libconfig::SettingNotFoundException &nfex) {
         std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
@@ -44,7 +48,7 @@ const unsigned Configuration::getConnectionsMaxCount() {
     return connectionsMaxCount;
 }
 
-const char* Configuration::getRootDirectory() const {
+const char *Configuration::getRootDirectory() {
     return rootDirectory;
 }
 
@@ -54,4 +58,8 @@ const unsigned Configuration::getBufferSize() {
 
 const char *Configuration::getServerName() {
     return serverName;
+}
+
+const char *Configuration::getDefaultPage() {
+    return defaultPage;
 }

@@ -7,11 +7,11 @@
 
 #include <map>
 #include <string>
-#include "../FS/fileTypes.h"
+#include "../FS/FileTypes.h"
 
 class MIMETypes {
 public:
-    typedef std::map<FileType, std::string> MIMEType_t;
+    typedef std::map<FileTypes::FileType, std::string> MIMEType_t;
     static MIMEType_t map;
 private:
     static MIMETypes *self;

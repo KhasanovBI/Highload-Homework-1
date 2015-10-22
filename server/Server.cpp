@@ -43,14 +43,16 @@ void Server::IOAcceptCallback(ev::io &watcher, int revents) {
     new ClientInstance(clientSocketDescriptor);
 }
 
-void Server::instanciateHTTP() {
+void Server::instanciateStatics() {
+    FileTypes::Instance();
     Methods::Instance();
     MIMETypes::Instance();
     StatusCodes::Instance();
     Versions::Instance();
 }
 
-void Server::deleteInstancesHTTP() {
+void Server::deleteStaticInstances() {
+    FileTypes::DeleteInstance();
     Methods::DeleteInstance();
     MIMETypes::DeleteInstance();
     StatusCodes::DeleteInstance();
@@ -58,7 +60,7 @@ void Server::deleteInstancesHTTP() {
 }
 
 void Server::start() {
-    instanciateHTTP();
+    instanciateStatics();
     sockaddr_in socketAddress;
     socketAddress.sin_family = AF_INET; /* IP protocol family.  */
     socketAddress.sin_port = htons(port);
@@ -101,5 +103,5 @@ Server::~Server() {
     /* SHUT_RDWR - No more receptions or transmissions.  */
     shutdown(_socket, SHUT_RDWR);
     close(_socket);
-    deleteInstancesHTTP();
+    deleteStaticInstances();
 }
