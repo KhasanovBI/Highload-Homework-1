@@ -5,8 +5,8 @@
 #include "Configuration.h"
 #include "../server/Server.h"
 
-int main() {
-    Configuration *pConfiguration = new Configuration("settings.cfg");
+int main(int argc, char *argv[]) {
+    Configuration *pConfiguration = new Configuration(argc, argv, "settings.cfg");
     Server server(pConfiguration);
     server.start();
     delete pConfiguration;

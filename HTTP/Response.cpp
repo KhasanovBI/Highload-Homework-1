@@ -102,7 +102,7 @@ const std::string Response::getDateHeader() {
 }
 
 const std::string Response::getServerHeader() {
-    return std::string("Server: ").append(Configuration::getServerName()).append("\r\n");
+    return "Server: Neutrino\r\n";
 }
 
 Response::~Response() {

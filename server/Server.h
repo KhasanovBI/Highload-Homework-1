@@ -43,8 +43,6 @@ private:
 
     static void signalCallback(ev::sig &signal, int revents);
 
-    static int totalClientsCount;
-
     void IOAcceptCallback(ev::io &watcher, int revents);
 
     void writeCallback(ev::io &watcher, int revents);

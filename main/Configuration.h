@@ -5,6 +5,7 @@
 #ifndef HIGHLOAD_HTTP_SERVER_CONFIGURATION_H
 #define HIGHLOAD_HTTP_SERVER_CONFIGURATION_H
 
+#include <getopt.h>
 #include <iostream>
 #include <libconfig.h++>
 #include <string>
@@ -13,7 +14,7 @@
 
 class Configuration {
 public:
-    Configuration(std::string filepath);
+    Configuration(int argc, char *argv[], std::string filepath);
 
     const unsigned getPort();
 
@@ -27,18 +28,21 @@ public:
 
     static const char *getDefaultPage();
 
-    static const char *getServerName();
+    static const bool isDebugMessages();
 
 private:
     std::string filepath;
     libconfig::Config config;
-    unsigned port;
-    unsigned CPUCoresCount;
-    unsigned connectionsMaxCount;
-    static const char *rootDirectory;
+    static bool debugMessages;
     static unsigned bufferSize;
-    static const char *serverName;
+    unsigned connectionsMaxCount;
+    unsigned CPUCoresCount;
+    unsigned port;
+    static const char *rootDirectory;
     static const char *defaultPage;
+
+    void parseArgs(int argc, char **argv);
+
 };
 
 #endif //HIGHLOAD_HTTP_SERVER_CONFIGURATION_H

@@ -7,9 +7,9 @@
 unsigned Configuration::bufferSize;
 const char *Configuration::defaultPage;
 const char *Configuration::rootDirectory;
-const char *Configuration::serverName;
+bool Configuration::debugMessages;
 
-Configuration::Configuration(std::string filepath) : filepath(filepath) {
+Configuration::Configuration(int argc, char *argv[], std::string filepath) : filepath(filepath) {
     try {
         config.readFile("settings.cfg");
     } catch (const libconfig::FileIOException) {
@@ -21,18 +21,35 @@ Configuration::Configuration(std::string filepath) : filepath(filepath) {
         exit(EXIT_FAILURE);
     }
     try {
-        port = config.lookup("port");
-        CPUCoresCount = config.lookup("CPU_cores_count");
-        connectionsMaxCount = config.lookup("connections_max_count");
-        rootDirectory = config.lookup("root_directory");
         bufferSize = config.lookup("buffer_size");
+        connectionsMaxCount = config.lookup("connections_max_count");
+        CPUCoresCount = config.lookup("CPU_cores_count");
         defaultPage = config.lookup("default_page");
-        serverName = config.lookup("server_name");
+        debugMessages = config.lookup("debug_messages");
+        port = config.lookup("port");
+        rootDirectory = config.lookup("root_directory");
     } catch (const libconfig::SettingNotFoundException &nfex) {
         std::cerr << "Отсутствует параметр в конфигурационном файле." << std::endl;
         exit(EXIT_FAILURE);
     }
     Buffer::bufferSize = bufferSize;
+    parseArgs(argc, argv);
+}
+
+void Configuration::parseArgs(int argc, char **argv) {
+    int c;
+    while ((c = getopt(argc, argv, "r:c:")) != -1) {
+        switch (c) {
+            case 'r':
+                rootDirectory = optarg;
+                break;
+            case 'c':
+                CPUCoresCount = (unsigned int) atoi(optarg);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 const unsigned int Configuration::getPort() {
@@ -55,10 +72,10 @@ const unsigned Configuration::getBufferSize() {
     return bufferSize;
 }
 
-const char *Configuration::getServerName() {
-    return serverName;
-}
-
 const char *Configuration::getDefaultPage() {
     return defaultPage;
+}
+
+const bool Configuration::isDebugMessages() {
+    return debugMessages;
 }

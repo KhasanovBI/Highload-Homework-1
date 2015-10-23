@@ -25,7 +25,9 @@ void Server::signalCallback(ev::sig &signal, int revents) {
 
 void Server::IOAcceptCallback(ev::io &watcher, int revents) {
     if (ev::ERROR & revents) {
-        perror("Got invalid event");
+        if (Configuration::isDebugMessages()) {
+            perror("Got invalid event");
+        }
         return;
     }
 
@@ -34,23 +36,28 @@ void Server::IOAcceptCallback(ev::io &watcher, int revents) {
 
     int clientSocketDescriptor = accept(watcher.fd, (struct sockaddr *) &clientAddress, &clientLength);
     if (clientSocketDescriptor == -1) {
-        perror("Accept error");
+        if (Configuration::isDebugMessages()) {
+            perror("Accept error");
+        }
         return;
     }
     bool flag = true;
     setsockopt(clientSocketDescriptor, SOL_SOCKET, SO_KEEPALIVE, &flag, sizeof(flag));
     fcntl(clientSocketDescriptor, F_SETFL, fcntl(clientSocketDescriptor, F_GETFL, 0) | O_NONBLOCK);
-    std::cout << "Client connected: socket descriptor = " << clientSocketDescriptor << ", worker PID = " << getpid() <<
-    std::endl;
+    if (Configuration::isDebugMessages()) {
+        std::cout << "Client connected: socket descriptor = " << clientSocketDescriptor << ", worker PID = " <<
+        getpid() << std::endl;
+    }
     ev::io *pClientWatcher = new ev::io;
     pClientWatcher->set<Server, &Server::readCallback>(this);
     pClientWatcher->start(clientSocketDescriptor, ev::READ);
-    std::cout << "Total " << ++totalClientsCount << " client(s) connected." << std::endl;
 }
 
 void Server::readCallback(ev::io &watcher, int revents) {
     if (ev::ERROR & revents) {
-        perror("Got invalid event");
+        if (Configuration::isDebugMessages()) {
+            perror("Got invalid event");
+        }
         return;
     }
 
@@ -59,11 +66,15 @@ void Server::readCallback(ev::io &watcher, int revents) {
     readBuffer[readBytesCount] = '\0';
     switch (readBytesCount) {
         case -1:
-            perror("Read error");
+            if (Configuration::isDebugMessages()) {
+                perror("Read error");
+            }
         case 0:
             watcher.stop();
             delete &watcher;
-            std::cout << "Socket closed: FD = " << watcher.fd << ", worker's PID = " << getpid() << std::endl;
+            if (Configuration::isDebugMessages()) {
+                std::cout << "Socket closed: FD = " << watcher.fd << ", worker's PID = " << getpid() << std::endl;
+            }
             return;
         default:
             Response *pResponse = makeResponse(readBuffer);
@@ -81,7 +92,9 @@ void Server::readCallback(ev::io &watcher, int revents) {
 
 void Server::writeCallback(ev::io &watcher, int revents) {
     if (ev::ERROR & revents) {
-        perror("Got invalid event");
+        if (Configuration::isDebugMessages()) {
+            perror("Got invalid event");
+        }
         return;
     }
 
@@ -90,7 +103,9 @@ void Server::writeCallback(ev::io &watcher, int revents) {
     if (headersRemainBytes > 0) {
         ssize_t writtenBytesCount = send(watcher.fd, pWriteBuffer->getPHeadersPosition(), headersRemainBytes, 0);
         if (writtenBytesCount < 0) {
-            perror("Write error");
+            if (Configuration::isDebugMessages()) {
+                perror("Write error");
+            }
             return;
         }
         pWriteBuffer->headersPosition += writtenBytesCount;
@@ -98,7 +113,9 @@ void Server::writeCallback(ev::io &watcher, int revents) {
         ssize_t writtenBytesCount = sendfile(watcher.fd, pWriteBuffer->dataFD, pWriteBuffer->dataOffset,
                                              pWriteBuffer->getDataRemainBytes());
         if (writtenBytesCount == -1) {
-            perror("Sendfile error");
+            if (Configuration::isDebugMessages()) {
+                perror("Sendfile error");
+            }
             return;
         } else {
             pWriteBuffer->dataPosition += writtenBytesCount;
@@ -112,7 +129,6 @@ void Server::writeCallback(ev::io &watcher, int revents) {
         close(watcher.fd);
         delete pWriteBuffer;
         delete &watcher;
-        std::cout << "Total " << --totalClientsCount << " client(s) connected." << std::endl;
     }
 }
 
@@ -142,6 +158,7 @@ void Server::start() {
                      0); /* SOCK_STREAM - Connectionless, unreliable datagrams of fixed maximum length.  */
     if (_socket == -1) {
         perror("Can't create socket");
+        return;
     }
 
     bool flag = true;
@@ -173,8 +190,6 @@ void Server::start() {
 
     loop.run(0);
 }
-
-int Server::totalClientsCount = 0;
 
 Server::~Server() {
     /* SHUT_RDWR - No more receptions or transmissions.  */
