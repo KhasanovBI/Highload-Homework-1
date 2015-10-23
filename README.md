@@ -11,7 +11,7 @@
 | buffer_size           | Размера буфера                          | Integer |
 | connections_max_count | Максимальное число соединений           | Integer |
 | CPU_cores_count       | Количество используемых ядер процессора | Integer |
-| debug_messages        | Вывод отладочных сообщений в STDIN      | Boolean |
+| debug_messages        | Вывод отладочных сообщений в STDOUT     | Boolean |
 | default_page          | Имя индекса директории                  | String  |
 | port                  | Порт                                    | Integer |
 | root_directory        | Путь к корневой директории              | String  |
