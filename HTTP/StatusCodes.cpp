@@ -3,7 +3,6 @@
 //
 
 #include "StatusCodes.h"
-#include "../main/utils.h"
 
 StatusCodes *StatusCodes::self;
 StatusCodes::StatusCode_t StatusCodes::map;

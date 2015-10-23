@@ -3,7 +3,6 @@
 
 //
 
-#include <iostream>
 #include "Request.h"
 
 Request::Request(Methods::Method method, URLPath *pURLPath, Versions::Version version) : method(method),

@@ -5,11 +5,12 @@
 #ifndef HIGHLOAD_HTTP_SERVER_HANDLER_H
 #define HIGHLOAD_HTTP_SERVER_HANDLER_H
 
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 #include <string>
+
 #include "Request.h"
 #include "Response.h"
 

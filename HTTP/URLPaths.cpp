@@ -25,8 +25,16 @@ void URLPath::decodeURL() {
     *pURLPath = decodedURLPath;
 }
 
+void URLPath::removeQueryString() {
+    size_t position = pURLPath->find("?");
+    if (position != std::string::npos) {
+        *pURLPath = pURLPath->substr(0, position);
+    }
+}
+
 URLPath::URLPath(char *pCharURLPath) {
     pURLPath = new std::string(pCharURLPath);
+    removeQueryString();
     decodeURL();
 }
 

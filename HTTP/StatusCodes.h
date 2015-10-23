@@ -5,9 +5,10 @@
 #ifndef HIGHLOAD_HTTP_SERVER_STATUSCODES_H
 #define HIGHLOAD_HTTP_SERVER_STATUSCODES_H
 
-
 #include <string>
 #include <map>
+
+#include "../main/utils.h"
 
 class StatusCodes {
 public:
@@ -16,15 +17,15 @@ public:
     };
     typedef std::map<StatusCode, std::string> StatusCode_t;
     static StatusCode_t map;
+
+    static StatusCodes *Instance();
+
+    static bool DeleteInstance();
+
 private:
     static StatusCodes *self;
 
     StatusCodes();
-
-public:
-    static bool DeleteInstance();
-
-    static StatusCodes *Instance();
 };
 
 

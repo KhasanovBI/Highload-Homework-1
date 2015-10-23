@@ -9,11 +9,12 @@
 #include <linux/limits.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../FS/FileTypes.h"
-#include "../FS/paths.h"
+
 #include "MIMETypes.h"
 #include "Request.h"
 #include "StatusCodes.h"
+#include "../FS/FileTypes.h"
+#include "../FS/paths.h"
 
 class Response {
 public:
@@ -25,6 +26,7 @@ public:
     Versions::Version version;
 
     Response(Request *pRequest);
+
     ~Response();
 
 private:

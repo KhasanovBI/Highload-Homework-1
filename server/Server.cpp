@@ -10,10 +10,6 @@ Server::Server(Configuration *pConfiguration) : pConfiguration(pConfiguration) {
     connectionsMaxCount = pConfiguration->getConnectionsMaxCount();
 };
 
-void Server::signalCallback(ev::sig &signal, int revents) {
-    signal.loop.break_loop();
-}
-
 void Server::createWorkers() {
     __pid_t pid = 1;
     for (int i = 0; i < workersCount; ++i) {
@@ -23,8 +19,12 @@ void Server::createWorkers() {
     }
 }
 
+void Server::signalCallback(ev::sig &signal, int revents) {
+    signal.loop.break_loop();
+}
+
 void Server::IOAcceptCallback(ev::io &watcher, int revents) {
-    if (EV_ERROR & revents) {
+    if (ev::ERROR & revents) {
         perror("Got invalid event");
         return;
     }
@@ -37,10 +37,83 @@ void Server::IOAcceptCallback(ev::io &watcher, int revents) {
         perror("Accept error");
         return;
     }
-
+    bool flag = true;
+    setsockopt(clientSocketDescriptor, SOL_SOCKET, SO_KEEPALIVE, &flag, sizeof(flag));
+    fcntl(clientSocketDescriptor, F_SETFL, fcntl(clientSocketDescriptor, F_GETFL, 0) | O_NONBLOCK);
     std::cout << "Client connected: socket descriptor = " << clientSocketDescriptor << ", worker PID = " << getpid() <<
     std::endl;
-    new ClientInstance(clientSocketDescriptor);
+    ev::io *pClientWatcher = new ev::io;
+    pClientWatcher->set<Server, &Server::readCallback>(this);
+    pClientWatcher->start(clientSocketDescriptor, ev::READ);
+    std::cout << "Total " << ++totalClientsCount << " client(s) connected." << std::endl;
+}
+
+void Server::readCallback(ev::io &watcher, int revents) {
+    if (ev::ERROR & revents) {
+        perror("Got invalid event");
+        return;
+    }
+
+    char readBuffer[Buffer::getBufferSize()];
+    ssize_t readBytesCount = recv(watcher.fd, readBuffer, sizeof(readBuffer) - 1, 0);
+    readBuffer[readBytesCount] = '\0';
+    switch (readBytesCount) {
+        case -1:
+            perror("Read error");
+        case 0:
+            watcher.stop();
+            delete &watcher;
+            std::cout << "Socket closed: FD = " << watcher.fd << ", worker's PID = " << getpid() << std::endl;
+            return;
+        default:
+            Response *pResponse = makeResponse(readBuffer);
+            Buffer *pWriteBuffer = new Buffer(pResponse->headers, pResponse->dataFD, pResponse->dataSize);
+
+            ev::io *pWriteWatcher = new ev::io;
+            pWriteWatcher->set<Server, &Server::writeCallback>(this);
+            pWriteWatcher->start(watcher.fd, ev::WRITE);
+            pWriteWatcher->data = (void *) pWriteBuffer;
+            delete pResponse;
+            delete &watcher;
+            break;
+    }
+}
+
+void Server::writeCallback(ev::io &watcher, int revents) {
+    if (ev::ERROR & revents) {
+        perror("Got invalid event");
+        return;
+    }
+
+    Buffer *pWriteBuffer = (Buffer *) watcher.data;
+    size_t headersRemainBytes = pWriteBuffer->getHeadersRemainBytes();
+    if (headersRemainBytes > 0) {
+        ssize_t writtenBytesCount = send(watcher.fd, pWriteBuffer->getPHeadersPosition(), headersRemainBytes, 0);
+        if (writtenBytesCount < 0) {
+            perror("Write error");
+            return;
+        }
+        pWriteBuffer->headersPosition += writtenBytesCount;
+    } else if (pWriteBuffer->dataFD != -1) {
+        ssize_t writtenBytesCount = sendfile(watcher.fd, pWriteBuffer->dataFD, pWriteBuffer->dataOffset,
+                                             pWriteBuffer->getDataRemainBytes());
+        if (writtenBytesCount == -1) {
+            perror("Sendfile error");
+            return;
+        } else {
+            pWriteBuffer->dataPosition += writtenBytesCount;
+        }
+    }
+
+    if (pWriteBuffer->getHeadersRemainBytes() == 0 &&
+        (pWriteBuffer->dataFD == -1 || pWriteBuffer->getDataRemainBytes() == 0)) {
+        watcher.stop();
+        close(pWriteBuffer->dataFD);
+        close(watcher.fd);
+        delete pWriteBuffer;
+        delete &watcher;
+        std::cout << "Total " << --totalClientsCount << " client(s) connected." << std::endl;
+    }
 }
 
 void Server::instanciateStatics() {
@@ -100,6 +173,8 @@ void Server::start() {
 
     loop.run(0);
 }
+
+int Server::totalClientsCount = 0;
 
 Server::~Server() {
     /* SHUT_RDWR - No more receptions or transmissions.  */

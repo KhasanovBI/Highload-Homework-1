@@ -6,20 +6,22 @@
 #define HIGHLOAD_HTTP_SERVER_URLPATH_H
 
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 
 class URLPath {
-private:
-    std::string *pURLPath;
-
-    void decodeURL();
-
 public:
     URLPath(char *pCharURLPath);
 
     ~URLPath();
 
     std::string getURLPath() const;
+
+private:
+    std::string *pURLPath;
+
+    void decodeURL();
+
+    void removeQueryString();
 };
 
 #endif //HIGHLOAD_HTTP_SERVER_URLPATH_H

@@ -6,15 +6,11 @@
 
 unsigned Buffer::bufferSize;
 
-Buffer::Buffer(std::string headers, int dataFD, off_t dataSize) : headersPosition(0),
-                                                                  dataFD(dataFD), dataOffset(NULL), dataSize(dataSize) {
+Buffer::Buffer(std::string headers, int dataFD, off_t dataSize) : headersPosition(0), dataFD(dataFD), dataOffset(NULL),
+                                                                  dataPosition(0), dataSize(dataSize) {
     headersLength = headers.size();
     pCharHeaders = new char[headersLength];
     memcpy(pCharHeaders, headers.c_str(), headersLength);
-}
-
-Buffer::~Buffer() {
-    delete[] pCharHeaders;
 }
 
 const unsigned int Buffer::getBufferSize() {

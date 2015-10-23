@@ -5,21 +5,13 @@
 #ifndef HIGHLOAD_HTTP_SERVER_CONFIGURATION_H
 #define HIGHLOAD_HTTP_SERVER_CONFIGURATION_H
 
-
 #include <iostream>
 #include <libconfig.h++>
 #include <string>
 
+#include "../server/Buffer.h"
+
 class Configuration {
-    std::string filepath;
-    libconfig::Config config;
-    unsigned port;
-    unsigned CPUCoresCount;
-    unsigned connectionsMaxCount;
-    static const char *rootDirectory;
-    static unsigned bufferSize;
-    static const char* serverName;
-    static const char* defaultPage;
 public:
     Configuration(std::string filepath);
 
@@ -33,12 +25,20 @@ public:
 
     static const unsigned getBufferSize();
 
-    static const char * getDefaultPage();
+    static const char *getDefaultPage();
 
-    static const char* getServerName();
+    static const char *getServerName();
 
-
+private:
+    std::string filepath;
+    libconfig::Config config;
+    unsigned port;
+    unsigned CPUCoresCount;
+    unsigned connectionsMaxCount;
+    static const char *rootDirectory;
+    static unsigned bufferSize;
+    static const char *serverName;
+    static const char *defaultPage;
 };
-
 
 #endif //HIGHLOAD_HTTP_SERVER_CONFIGURATION_H

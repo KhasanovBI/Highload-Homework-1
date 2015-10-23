@@ -7,21 +7,22 @@
 
 #include <map>
 #include <string>
+
 #include "../FS/FileTypes.h"
 
 class MIMETypes {
 public:
     typedef std::map<FileTypes::FileType, std::string> MIMEType_t;
     static MIMEType_t map;
+
+    static MIMETypes *Instance();
+
+    static bool DeleteInstance();
+
 private:
     static MIMETypes *self;
 
     MIMETypes();
-
-public:
-    static bool DeleteInstance();
-
-    static MIMETypes *Instance();
 };
 
 #endif //HIGHLOAD_HTTP_SERVER_MIMETYPES_H

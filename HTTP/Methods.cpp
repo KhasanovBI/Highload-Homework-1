@@ -7,13 +7,13 @@
 
 Methods *Methods::self;
 Methods::Method_t Methods::map;
+
 Methods::Methods() {
     mapInit(map)
             (GET, "GET")
             (HEAD, "HEAD")
             (UNSUPPORTED, "Not Allowed");
 }
-
 
 Methods *Methods::Instance() {
     if (!self) {

@@ -15,17 +15,17 @@ public:
     };
     typedef std::map<Version, std::string> Version_t;
     static Version_t map;
-private:
-    static Versions *self;
 
-    Versions();
-
-public:
     static Versions *Instance();
 
     static bool DeleteInstance();
 
     static Version getVersionFromString(char *pCharVersion);
+
+private:
+    static Versions *self;
+
+    Versions();
 };
 
 

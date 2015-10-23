@@ -5,9 +5,9 @@
 #ifndef HIGHLOAD_HTTP_SERVER_FILETYPES_H
 #define HIGHLOAD_HTTP_SERVER_FILETYPES_H
 
-
 #include <map>
 #include <string>
+
 #include "../FS/FileTypes.h"
 
 class FileTypes {
@@ -17,18 +17,17 @@ public:
     };
     typedef std::map<FileType, std::string> FileType_t;
     static FileType_t map;
+
+    static FileTypes *Instance();
+
+    static bool DeleteInstance();
+
+    static FileType getFileTypeFromPath(std::string &path);
+
 private:
     static FileTypes *self;
 
     FileTypes();
-
-public:
-    static bool DeleteInstance();
-
-    static FileTypes *Instance();
-
-    static FileType getFileTypeFromPath(std::string &path);
 };
-
 
 #endif //HIGHLOAD_HTTP_SERVER_FILETYPES_H

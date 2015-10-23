@@ -7,6 +7,7 @@
 
 FileTypes *FileTypes::self;
 FileTypes::FileType_t FileTypes::map;
+
 FileTypes::FileTypes() {
     mapInit(map)
             (html, "html")

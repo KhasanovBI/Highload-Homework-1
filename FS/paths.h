@@ -6,6 +6,7 @@
 #define HIGHLOAD_HTTP_SERVER_PATH_H
 
 #include <string>
+
 #include "../HTTP/Request.h"
 #include "../main/Configuration.h"
 

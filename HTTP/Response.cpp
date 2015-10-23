@@ -48,7 +48,7 @@ Response::Response(Request *pRequest): dataSize(0), dataFD(-1) {
                     close(FD);
                     statusCode = StatusCodes::_404;
                 }
-            } else if (access(filePath.c_str(), F_OK)) {
+            } else if (!access(filePath.c_str(), F_OK)) {
                 statusCode = StatusCodes::_404;
             } else {
                 statusCode = StatusCodes::_403;

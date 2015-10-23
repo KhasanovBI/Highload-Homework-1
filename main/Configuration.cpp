@@ -3,7 +3,6 @@
 //
 
 #include "Configuration.h"
-#include "../server/Server.h"
 
 unsigned Configuration::bufferSize;
 const char *Configuration::defaultPage;

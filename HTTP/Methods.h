@@ -15,17 +15,17 @@ public:
     };
     typedef std::map<Method, std::string> Method_t;
     static Method_t map;
-private:
-    static Methods *self;
 
-    Methods();
+    static Methods *Instance();
 
-public:
     static bool DeleteInstance();
 
     static Method getMethodFromString(char *pCharMethod);
 
-    static Methods *Instance();
+private:
+    static Methods *self;
+
+    Methods();
 };
 
 #endif //HIGHLOAD_HTTP_SERVER_METHODS_H
