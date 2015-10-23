@@ -14,7 +14,7 @@
 | debug_messages        | Вывод отладочных сообщений в STDIN      | Boolean |
 | default_page          | Имя индекса директории                  | String  |
 | port                  | Порт                                    | Integer |
-| root_directory        | Имя корневой директории                 | String  |
+| root_directory        | Путь к корневой директории              | String  |
 
 ##### Поддерживаемые ключи
 
